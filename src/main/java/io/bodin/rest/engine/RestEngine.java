@@ -1,7 +1,7 @@
 package io.bodin.rest.engine;
 
-import io.bodin.rest.RestRequest;
-import io.bodin.rest.RestResponse;
+import io.bodin.rest.model.RestRequest;
+import io.bodin.rest.model.RestResponse;
 
 import java.io.IOException;
 

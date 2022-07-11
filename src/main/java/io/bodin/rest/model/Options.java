@@ -1,4 +1,4 @@
-package io.bodin.rest;
+package io.bodin.rest.model;
 
 import io.bodin.rest.contract.Immutable;
 
@@ -10,7 +10,7 @@ public class Options implements Serializable, Immutable<Options> {
     private final Duration timeoutConnect;
     private final Duration timeoutRead;
 
-    public static Options None = new Options();
+    public static final Options None = new Options();
 
     public static Options.Builder builder(){
         return new Options.Builder();
@@ -44,11 +44,6 @@ public class Options implements Serializable, Immutable<Options> {
 
     public Duration getTimeoutRead() {
         return timeoutRead;
-    }
-
-    @Override
-    public Options copy() {
-        return new Options(this);
     }
 
     public static class Builder {

@@ -1,5 +1,6 @@
-package io.bodin.rest;
+package io.bodin.rest.model;
 
+import io.bodin.rest.Utils;
 import io.bodin.rest.contract.Immutable;
 
 import java.io.Serializable;
@@ -12,7 +13,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class Location implements Serializable, Immutable<Location> {
-    public static Location Root = new Location();
+    public static final Location Root = new Location();
 
     private final List<String> path;
     private final Map<String, List<String>> params;
@@ -70,10 +71,6 @@ public class Location implements Serializable, Immutable<Location> {
     }
     private String encode(String in){
         return URLEncoder.encode(in, Charset.defaultCharset());
-    }
-    @Override
-    public Location copy() {
-        return new Location(this);
     }
 
     public static class Builder {

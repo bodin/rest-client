@@ -1,4 +1,4 @@
-package io.bodin.rest;
+package io.bodin.rest.model;
 
 import io.bodin.rest.contract.Immutable;
 
@@ -28,11 +28,6 @@ public class Header implements Serializable, Immutable {
 
     public String getValue() {
         return value;
-    }
-
-    @Override
-    public Object copy() {
-        return new Header(this);
     }
 
     @Override

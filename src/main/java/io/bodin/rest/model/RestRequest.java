@@ -1,4 +1,4 @@
-package io.bodin.rest;
+package io.bodin.rest.model;
 
 import io.bodin.rest.contract.Immutable;
 
@@ -7,7 +7,7 @@ public class RestRequest<SEND, READ> implements Immutable<RestRequest> {
     private final Location location;
     private final Headers headers;
     private final Options options;
-    private final SEND entity;
+    private final Entity<SEND> entity;
     private final Class<READ> responseType;
 
     public static <SEND, READ> RestRequest.Builder<SEND, READ> builder(){
@@ -32,7 +32,7 @@ public class RestRequest<SEND, READ> implements Immutable<RestRequest> {
         return builder().method(Method.PATCH);
     }
 
-    protected RestRequest(Method method, Location location, Headers headers, Options options, SEND entity, Class<READ> responseType) {
+    protected RestRequest(Method method, Location location, Headers headers, Options options, Entity<SEND> entity, Class<READ> responseType) {
         this.method = method;
         this.location = location;
         this.headers = headers;
@@ -57,7 +57,7 @@ public class RestRequest<SEND, READ> implements Immutable<RestRequest> {
         return options;
     }
 
-    public SEND getEntity() {
+    public Entity<SEND> getEntity() {
         return entity;
     }
 
@@ -65,17 +65,13 @@ public class RestRequest<SEND, READ> implements Immutable<RestRequest> {
         return responseType;
     }
 
-    @Override
-    public RestRequest<SEND, READ> copy() {
-        return new RestRequest<>(method, location, headers, options, entity, responseType);
-    }
 
     public static class Builder<SEND, READ> {
-        private Method method;
-        private Location location;
-        private Headers headers;
-        private Options options;
-        private SEND entity;
+        private Method method = Method.GET;
+        private Location location = Location.Root;
+        private Headers headers = Headers.None;
+        private Options options = Options.None;
+        private Entity<SEND> entity = Entity.None();
         private Class<READ> responseType;
         public Builder<SEND, READ> method(Method method) {
             this.method = method;
@@ -93,7 +89,7 @@ public class RestRequest<SEND, READ> implements Immutable<RestRequest> {
             this.options = options;
             return this;
         }
-        public Builder<SEND, READ> entity(SEND entity) {
+        public Builder<SEND, READ> entity(Entity<SEND> entity) {
             this.entity = entity;
             return this;
         }

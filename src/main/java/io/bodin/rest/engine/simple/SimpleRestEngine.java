@@ -1,8 +1,8 @@
 package io.bodin.rest.engine.simple;
 
-import io.bodin.rest.RestRequest;
-import io.bodin.rest.RestResponse;
 import io.bodin.rest.engine.RestEngine;
+import io.bodin.rest.model.RestRequest;
+import io.bodin.rest.model.RestResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 public class SimpleRestEngine implements RestEngine {
     private URL base;
@@ -37,12 +38,13 @@ public class SimpleRestEngine implements RestEngine {
             if (r.getOptions().getTimeoutRead() != null) {
                 con.setReadTimeout((int) r.getOptions().getTimeoutRead().toMillis());
             }
-
-            //need to collect them into comma separated
-            //for(Header h : r.getHeaders()) {
-                //con.setRequestProperty(h.getName(), h.getValue());
-            //}
-
+            for(Map.Entry<String, String> e : r.getHeaders().collapse().entrySet()){
+                con.setRequestProperty(e.getKey(), e.getValue());
+            }
+            con.setRequestProperty("Content Type", r.getEntity().getContentType());
+            if(r.getEntity().getEntity() != null){
+                //serialize output
+            }
             int status = con.getResponseCode();
             StringBuffer content = new StringBuffer();
 
@@ -56,11 +58,11 @@ public class SimpleRestEngine implements RestEngine {
             if(r.getResponseType() == String.class){
                 @SuppressWarnings("unchecked")
                 READ body = (READ)content.toString();
-                return new RestResponse<>(status, body);
+                return RestResponse.of(status, body);
             }else if(r.getResponseType() == byte[].class){
                 @SuppressWarnings("unchecked")
                 READ body = (READ)content.toString().getBytes(Charset.defaultCharset());
-                return new RestResponse<>(status, body);
+                return RestResponse.of(status, body);
             }else{
                 throw new UnsupportedOperationException("Can't serializable to " + r.getResponseType());
             }
