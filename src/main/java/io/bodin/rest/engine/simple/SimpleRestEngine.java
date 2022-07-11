@@ -1,5 +1,6 @@
 package io.bodin.rest.engine.simple;
 
+import io.bodin.rest.Header;
 import io.bodin.rest.RestRequest;
 import io.bodin.rest.RestResponse;
 import io.bodin.rest.engine.RestEngine;
@@ -37,8 +38,11 @@ public class SimpleRestEngine implements RestEngine {
             if (r.getOptions().getTimeoutRead() != null) {
                 con.setReadTimeout((int) r.getOptions().getTimeoutRead().toMillis());
             }
-
-            //con.setRequestProperty("Content-Type", "application/json");
+            
+            //need to collect them into comma separated
+            //for(Header h : r.getHeaders()) {
+                //con.setRequestProperty(h.getName(), h.getValue());
+            //}
 
             int status = con.getResponseCode();
             StringBuffer content = new StringBuffer();

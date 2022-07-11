@@ -1,11 +1,11 @@
 
 package io.bodin.rest.engine.simple
 
-import io.bodin.rest.BaseTest
+import io.bodin.rest.BaseServerTest
 import io.bodin.rest.Location
 import io.bodin.rest.client.RestClient
 
-class SimpleRestEngineTest extends BaseTest {
+class SimpleRestEngineTest extends BaseServerTest {
     def "test a simple GET request"() {
         setup:
         def client = new RestClient(new SimpleRestEngine(BASE))

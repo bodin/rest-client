@@ -7,7 +7,7 @@ import io.bodin.rest.engine.simple.SimpleRestEngine
 import spock.lang.Shared
 import spock.lang.Specification
 
-class BaseTest extends Specification {
+class BaseServerTest extends Specification {
 
     @Shared
     protected HttpServer server
@@ -27,5 +27,4 @@ class BaseTest extends Specification {
     def cleanupSpec(){
         server.stop(0)
     }
-
 }

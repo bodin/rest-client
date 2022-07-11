@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class Headers implements Serializable, Iterable<Map.Entry<String, List<String>>>, Immutable<Headers> {
-    private final Map<String, List<String>> headers;
+public class Headers implements Serializable, Iterable<Header>, Immutable<Headers> {
+    private final List<Header> headers;
 
     public static Headers None = new Headers();
     public static Builder withHeader(String name, String value){
@@ -15,13 +15,13 @@ public class Headers implements Serializable, Iterable<Map.Entry<String, List<St
     }
 
     protected Headers(){
-        this(Collections.emptyMap());
+        this(Collections.emptyList());
     }
     protected Headers(Headers other) {
-        this(Utils.copyLinked(other.headers));
+        this(new ArrayList<>(other.headers));
     }
 
-    protected Headers(Map<String, List<String>> headers) {
+    protected Headers(List<Header> headers) {
         this.headers = headers;
     }
 
@@ -30,21 +30,17 @@ public class Headers implements Serializable, Iterable<Map.Entry<String, List<St
         return new Headers(this);
     }
 
-    public  Map<String, List<String>> asMap() {
-        return new Headers(this).headers;
-    }
-
     @Override
-    public Iterator<Map.Entry<String, List<String>>> iterator() {
-        return this.headers.entrySet().iterator();
+    public Iterator<Header> iterator() {
+        return this.headers.iterator();
     }
 
     public static class Builder {
 
-        private Map<String, List<String>> headers = new LinkedHashMap<>();
+        private List<Header> headers = new ArrayList<>();
 
         public Builder header(String name, String... value) {
-            this.headers.merge(name, Arrays.asList(value), (o, t) -> Stream.concat(o.stream(), t.stream()).toList());
+            Arrays.asList(value).forEach(v -> this.headers.add(new Header(name, v)));
             return this;
         }
 
