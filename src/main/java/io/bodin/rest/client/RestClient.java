@@ -16,8 +16,8 @@ public class RestClient {
     public <T,S> RestResponse<S> execute(RestRequest<T,S> request) throws IOException {
         return this.engine.execute(request);
     }
-    public RestResponse<byte[]> get(Location location) throws IOException {
-        return this.engine.execute(create(Method.GET, location, null, null, null, byte[].class));
+    public RestResponse<String> get(Location location) throws IOException {
+        return this.engine.execute(create(Method.GET, location, null, null, null, String.class));
     }
 
     private static <T,S> RestRequest<T,S> create(Method m, Location l, Options o, Headers h, T entity, Class<S> type){

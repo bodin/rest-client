@@ -15,6 +15,6 @@ class SimpleRestEngineTest extends BaseServerTest {
 
         then:
         result.status == 200
-        result.entity == "Hello World".bytes
+        result.entity == "Hello World"
     }
 }

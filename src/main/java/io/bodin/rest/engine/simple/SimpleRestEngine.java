@@ -1,6 +1,5 @@
 package io.bodin.rest.engine.simple;
 
-import io.bodin.rest.Header;
 import io.bodin.rest.RestRequest;
 import io.bodin.rest.RestResponse;
 import io.bodin.rest.engine.RestEngine;
@@ -38,7 +37,7 @@ public class SimpleRestEngine implements RestEngine {
             if (r.getOptions().getTimeoutRead() != null) {
                 con.setReadTimeout((int) r.getOptions().getTimeoutRead().toMillis());
             }
-            
+
             //need to collect them into comma separated
             //for(Header h : r.getHeaders()) {
                 //con.setRequestProperty(h.getName(), h.getValue());
@@ -54,10 +53,17 @@ public class SimpleRestEngine implements RestEngine {
                 }
             }
 
-            @SuppressWarnings("unchecked")
-            READ body = (READ)content.toString().getBytes(Charset.defaultCharset());
-
-            return new RestResponse<>(status, body);
+            if(r.getResponseType() == String.class){
+                @SuppressWarnings("unchecked")
+                READ body = (READ)content.toString();
+                return new RestResponse<>(status, body);
+            }else if(r.getResponseType() == byte[].class){
+                @SuppressWarnings("unchecked")
+                READ body = (READ)content.toString().getBytes(Charset.defaultCharset());
+                return new RestResponse<>(status, body);
+            }else{
+                throw new UnsupportedOperationException("Can't serializable to " + r.getResponseType());
+            }
 
         }finally{
             con.disconnect();

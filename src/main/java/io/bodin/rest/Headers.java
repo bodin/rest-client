@@ -4,7 +4,6 @@ import io.bodin.rest.contract.Immutable;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class Headers implements Serializable, Iterable<Header>, Immutable<Headers> {
     private final List<Header> headers;
