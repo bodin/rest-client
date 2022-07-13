@@ -1,6 +1,8 @@
 package io.bodin.rest.engine.simple;
 
 import io.bodin.rest.engine.RestEngine;
+import io.bodin.rest.engine.simple.handlers.ContentHandler;
+import io.bodin.rest.model.Headers;
 import io.bodin.rest.model.RestRequest;
 import io.bodin.rest.model.RestResponse;
 
@@ -9,15 +11,24 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class SimpleRestEngine implements RestEngine {
     private URL base;
 
+    private List<ContentHandler> handlers;
+
     public SimpleRestEngine(URL base) {
-        this.base = base;
+        this(base, Collections.emptyList());
     }
+    public SimpleRestEngine(URL base, List<ContentHandler> handlers) {
+        this.base = base;
+        this.handlers = new ArrayList<>(handlers);
+    }
+
 
     @Override
     public <SEND, READ> RestResponse<READ> execute(RestRequest<SEND, READ> request) throws IOException {
@@ -41,31 +52,23 @@ public class SimpleRestEngine implements RestEngine {
             for(Map.Entry<String, String> e : r.getHeaders().collapse().entrySet()){
                 con.setRequestProperty(e.getKey(), e.getValue());
             }
-            con.setRequestProperty("Content Type", r.getEntity().getContentType());
+
             if(r.getEntity().getEntity() != null){
+                con.setRequestProperty(Headers.CONTENT_TYPE, r.getEntity().getContentType());
+                con.setDoOutput(true);
                 //serialize output
             }
             int status = con.getResponseCode();
-            StringBuffer content = new StringBuffer();
+            String contentType = con.getHeaderField(Headers.CONTENT_TYPE);
 
-            try(BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
-                String inputLine;
-                while ((inputLine = in.readLine()) != null) {
-                    content.append(inputLine);
+            for(ContentHandler h : this.handlers){
+                if(h.isSupported(contentType, r.getResponseType())){
+                    READ body = h.parse(con.getInputStream(), r.getResponseType());
+                    return RestResponse.of(status, body);
                 }
             }
 
-            if(r.getResponseType() == String.class){
-                @SuppressWarnings("unchecked")
-                READ body = (READ)content.toString();
-                return RestResponse.of(status, body);
-            }else if(r.getResponseType() == byte[].class){
-                @SuppressWarnings("unchecked")
-                READ body = (READ)content.toString().getBytes(Charset.defaultCharset());
-                return RestResponse.of(status, body);
-            }else{
-                throw new UnsupportedOperationException("Can't serializable to " + r.getResponseType());
-            }
+            throw new UnsupportedOperationException("Can't serializable to " + r.getResponseType());
 
         }finally{
             con.disconnect();

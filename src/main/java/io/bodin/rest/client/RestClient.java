@@ -20,6 +20,10 @@ public class RestClient {
         return this.engine.execute(create(Method.GET, location, Options.None, Headers.None, Entity.None(), String.class));
     }
 
+    public <T> RestResponse<T> get(Location location, Class<T> type) throws IOException {
+        return this.engine.execute(create(Method.GET, location, Options.None, Headers.None, Entity.None(), type));
+    }
+
     private static <T,S> RestRequest<T,S> create(Method m, Location l, Options o, Headers h, Entity<T> entity, Class<S> type){
         return RestRequest.<T,S>builder()
                 .method(m == null ? Method.GET : m)

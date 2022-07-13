@@ -19,6 +19,10 @@ public class Location implements Serializable, Immutable<Location> {
     private final Map<String, List<String>> params;
     private final String hash;
 
+    public static Location ofPath(String ... s){
+        return new Builder().path(s).build();
+    }
+
     public static Builder withRoot(){
         return new Builder();
     }

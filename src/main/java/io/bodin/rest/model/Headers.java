@@ -7,6 +7,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Headers implements Serializable, Iterable<Header>, Immutable<Headers> {
+
+    public static String CONTENT_TYPE = "Content-Type";
+
     private final List<Header> headers;
 
     public static final Headers None = new Headers();

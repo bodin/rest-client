@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.Duration;
 
 public class Entity<T> implements Immutable<Entity> {
+
     public static String APPLICATION_JSON = "application/json";
     public static String APPLICATION_XML = "application/xml";
     public static String TEXT_PLAIN = "text/plain";
@@ -14,7 +15,7 @@ public class Entity<T> implements Immutable<Entity> {
     private final T entity;
 
     public static final <T> Entity<T> None(){
-      return new Entity<>();
+      return new Entity<>(null, null);
     }
 
     public static <T> Entity<T> of(String contentType, T entity){

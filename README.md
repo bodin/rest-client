@@ -6,7 +6,6 @@
 Builder -> with* method prefixes
 Static constructors -> of* method prefixes
 
-
 ## TODO
 1. Documentation
 2. Test Cases
@@ -14,7 +13,7 @@ Static constructors -> of* method prefixes
 4. Entity object
 5. Cookies
 6. Interceptors
-
+7. toStrings for all data classes
 
 ## DONE
 1. correct headers
