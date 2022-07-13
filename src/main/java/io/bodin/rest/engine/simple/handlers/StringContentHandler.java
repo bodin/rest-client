@@ -1,13 +1,16 @@
 package io.bodin.rest.engine.simple.handlers;
 
+import io.bodin.rest.model.Entity;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-public class StringContentHandler implements ContentHandler {
+public class StringContentHandler extends ByteContentHandler {
 
     @Override
-    public <T> boolean isSupported(String contentType, Class<T> type) {
+    public <T> boolean isSupportedParse(String contentType, Class<T> type) {
         return type.equals(String.class);
     }
 

@@ -52,15 +52,24 @@ public class SimpleRestEngine implements RestEngine {
             }
 
             if(r.getEntity().getEntity() != null){
-                con.setRequestProperty(Headers.CONTENT_TYPE, r.getEntity().getContentType());
-                con.setDoOutput(true);
-                //serialize output
+                boolean written = false;
+                for(ContentHandler h : this.handlers) {
+                    if (h.isSupportedWrite(r.getEntity())) {
+                        con.setRequestProperty(Headers.CONTENT_TYPE, r.getEntity().getContentType());
+                        con.setDoOutput(true);
+                        h.write(con.getOutputStream(), r.getEntity());
+                        written = true;
+                        break;
+                    }
+                }
+                if(!written) throw new UnsupportedOperationException("Can't serializable as " + r.getEntity().getContentType());
             }
+
             int status = con.getResponseCode();
             String contentType = con.getHeaderField(Headers.CONTENT_TYPE);
 
             for(ContentHandler h : this.handlers){
-                if(h.isSupported(contentType, r.getResponseType())){
+                if(h.isSupportedParse(contentType, r.getResponseType())){
                     READ body = h.parse(con.getInputStream(), r.getResponseType());
                     return RestResponse.of(status, body);
                 }
