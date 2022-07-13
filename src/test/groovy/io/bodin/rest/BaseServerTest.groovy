@@ -2,8 +2,6 @@
 package io.bodin.rest
 
 import com.sun.net.httpserver.HttpServer
-import io.bodin.rest.client.RestClient
-import io.bodin.rest.engine.simple.SimpleRestEngine
 import io.bodin.rest.model.Entity
 import io.bodin.rest.model.Headers
 import spock.lang.Shared

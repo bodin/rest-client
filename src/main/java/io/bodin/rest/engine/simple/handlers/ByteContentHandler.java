@@ -2,7 +2,6 @@ package io.bodin.rest.engine.simple.handlers;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 
 public class ByteContentHandler implements ContentHandler {
 

@@ -2,9 +2,6 @@ package io.bodin.rest.model;
 
 import io.bodin.rest.contract.Immutable;
 
-import java.io.Serializable;
-import java.time.Duration;
-
 public class Entity<T> implements Immutable<Entity> {
 
     public static String APPLICATION_JSON = "application/json";
