@@ -7,14 +7,12 @@ public class Entity<T> implements Immutable<Entity> {
     public static String APPLICATION_JSON = "application/json";
     public static String APPLICATION_XML = "application/xml";
     public static String TEXT_PLAIN = "text/plain";
-
     private final String contentType;
     private final T entity;
 
     public static final <T> Entity<T> None(){
       return new Entity<>(null, null);
     }
-
     public static <T> Entity<T> of(String contentType, T entity){
         return new Entity<>(contentType, entity);
     }
@@ -47,5 +45,13 @@ public class Entity<T> implements Immutable<Entity> {
 
     public T getEntity() {
         return entity;
+    }
+
+    @Override
+    public String toString() {
+        return "Entity{" +
+                "contentType='" + contentType + '\'' +
+                ", entity=" + entity +
+                '}';
     }
 }

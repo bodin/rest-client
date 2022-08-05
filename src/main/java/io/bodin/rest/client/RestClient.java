@@ -13,15 +13,19 @@ public class RestClient {
         this.engine = engine;
     }
 
-    public <T,S> RestResponse<S> execute(RestRequest<T,S> request) throws IOException {
+    public <SEND,READ> RestResponse<READ> execute(RestRequest<SEND,READ> request) throws IOException {
         return this.engine.execute(request);
     }
     public RestResponse<String> get(Location location) throws IOException {
-        return this.engine.execute(create(Method.GET, location, Options.None, Headers.None, Entity.None(), String.class));
+        return this.execute(create(Method.GET, location, Options.None, Headers.None, Entity.None(), String.class));
     }
 
-    public <T> RestResponse<T> get(Location location, Class<T> type) throws IOException {
-        return this.engine.execute(create(Method.GET, location, Options.None, Headers.None, Entity.None(), type));
+    public <READ> RestResponse<READ> get(Location location, Class<READ> type) throws IOException {
+        return this.execute(create(Method.GET, location, Options.None, Headers.None, Entity.None(), type));
+    }
+
+    public <SEND,READ> RestResponse<READ> post(Location location, Entity<SEND> e, Class<READ> type) throws IOException {
+        return this.execute(create(Method.POST, location, Options.None, Headers.None, e, type));
     }
 
     private static <T,S> RestRequest<T,S> create(Method m, Location l, Options o, Headers h, Entity<T> entity, Class<S> type){

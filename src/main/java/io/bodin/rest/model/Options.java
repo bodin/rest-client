@@ -46,6 +46,14 @@ public class Options implements Serializable, Immutable<Options> {
         return timeoutRead;
     }
 
+    @Override
+    public String toString() {
+        return "Options{" +
+                "timeoutConnect=" + timeoutConnect +
+                ", timeoutRead=" + timeoutRead +
+                '}';
+    }
+
     public static class Builder {
         private Duration timeoutConnect;
         private Duration timeoutRead;

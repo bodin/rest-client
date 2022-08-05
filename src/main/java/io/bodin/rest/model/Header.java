@@ -42,4 +42,12 @@ public class Header implements Serializable, Immutable {
     public int hashCode() {
         return Objects.hash(name, value);
     }
+
+    @Override
+    public String toString() {
+        return "Header{" +
+                "name='" + name + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

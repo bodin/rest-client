@@ -31,16 +31,17 @@ public class SimpleRestEngine implements RestEngine {
     @Override
     public <SEND, READ> RestResponse<READ> execute(RestRequest<SEND, READ> request) throws IOException {
         switch(request.getMethod()){
-            case GET: return get(request);
+            case GET: return execute("GET", request);
+            case POST: return execute("POST", request);
         }
         throw new IOException("Unknown method " + request.getMethod());
     }
 
-    private <SEND, READ> RestResponse<READ> get(RestRequest<SEND, READ> r) throws IOException{
+    private <SEND, READ> RestResponse<READ> execute(String method, RestRequest<SEND, READ> r) throws IOException{
         URL url = r.getLocation().toURL(this.base);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         try{
-            con.setRequestMethod("GET");
+            con.setRequestMethod(method);
             if (r.getOptions().getTimeoutConnect() != null) {
                 con.setConnectTimeout((int)r.getOptions().getTimeoutConnect().toMillis());
             }
@@ -66,12 +67,18 @@ public class SimpleRestEngine implements RestEngine {
             }
 
             int status = con.getResponseCode();
+            Headers.Builder headers = Headers.builder();
             String contentType = con.getHeaderField(Headers.CONTENT_TYPE);
+            con.getHeaderFields().entrySet().forEach(e -> {
+                if(e.getKey() != null) {
+                    headers.header(e.getKey(), String.join(",", e.getValue()));
+                }
+            });
 
             for(ContentHandler h : this.handlers){
                 if(h.isSupportedParse(contentType, r.getResponseType())){
                     READ body = h.parse(con.getInputStream(), r.getResponseType());
-                    return RestResponse.of(status, body);
+                    return RestResponse.of(status, headers.build(), body);
                 }
             }
 

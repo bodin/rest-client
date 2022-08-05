@@ -8,14 +8,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
-public class JsonContentHandler implements ContentHandler {
+public class JSONContentHandler implements ContentHandler {
     private final Gson gson;
 
-    public JsonContentHandler() {
+    public JSONContentHandler() {
         this(new Gson());
     }
 
-    public JsonContentHandler(Gson gson) {
+    public JSONContentHandler(Gson gson) {
         this.gson = gson;
     }
 

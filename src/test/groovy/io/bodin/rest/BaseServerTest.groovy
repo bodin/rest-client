@@ -17,15 +17,45 @@ class BaseServerTest extends Specification {
 
     def setupSpec() {
         server = HttpServer.create(new InetSocketAddress(8080), /*max backlog*/ 0)
-        server.createContext("/") { http ->
+        server.createContext("/text") { http ->
             http.responseHeaders.add(Headers.CONTENT_TYPE, Entity.TEXT_PLAIN)
-            http.sendResponseHeaders(200, 0)
-            http.responseBody.withWriter {it << "Hello World"}
+            if(http.requestMethod == 'POST'){
+                byte[] request = http.requestBody.readAllBytes()
+                http.sendResponseHeaders(200, 0)
+                http.responseBody.with{it << request; it.close()}
+            } else if(http.requestMethod == 'GET'){
+                http.sendResponseHeaders(200, 0)
+                http.responseBody.withWriter {it << "Hello World"}
+            }else{
+                http.sendResponseHeaders(404, 0)
+            }
         }
         server.createContext("/json") { http ->
             http.responseHeaders.add(Headers.CONTENT_TYPE, Entity.APPLICATION_JSON)
-            http.sendResponseHeaders(200, 0)
-            http.responseBody.withWriter {it << "{'msg':'Hello World'}"}
+            if(http.requestMethod == 'POST'){
+                byte[] request = http.requestBody.readAllBytes()
+                println(new String(request))
+                http.sendResponseHeaders(200, 0)
+                http.responseBody.with{it << request; it.close()}
+            } else if(http.requestMethod == 'GET'){
+                http.sendResponseHeaders(200, 0)
+                http.responseBody.withWriter {it << "{'msg':'Hello World'}"}
+            }else{
+                http.sendResponseHeaders(404, 0)
+            }
+        }
+        server.createContext("/xml") { http ->
+            http.responseHeaders.add(Headers.CONTENT_TYPE, Entity.APPLICATION_XML)
+            if(http.requestMethod == 'POST'){
+                byte[] request = http.requestBody.readAllBytes()
+                http.sendResponseHeaders(200, 0)
+                http.responseBody.with{it << request; it.close()}
+            } else if(http.requestMethod == 'GET'){
+                http.sendResponseHeaders(200, 0)
+                http.responseBody.withWriter {it << "<doc><msg>Hello World</msg></doc>"}
+            }else{
+                http.sendResponseHeaders(404, 0)
+            }
         }
         server.start()
     }

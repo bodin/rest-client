@@ -13,6 +13,10 @@ public class Headers implements Serializable, Iterable<Header>, Immutable<Header
     private final List<Header> headers;
 
     public static final Headers None = new Headers();
+
+    public static Builder builder(){
+        return new Headers.Builder();
+    }
     public static Builder withHeades(Headers headers){
         Builder result = new Builder();
         headers.forEach(h -> result.header(h.getName(), h.getValue()));
@@ -67,5 +71,12 @@ public class Headers implements Serializable, Iterable<Header>, Immutable<Header
         public Headers build() {
             return new Headers(headers);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Headers{" +
+                "headers=" + headers +
+                '}';
     }
 }

@@ -101,4 +101,13 @@ public class Location implements Serializable, Immutable<Location> {
             return new Location(path, params, hash);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "path=" + path +
+                ", params=" + params +
+                ", hash='" + hash + '\'' +
+                '}';
+    }
 }
