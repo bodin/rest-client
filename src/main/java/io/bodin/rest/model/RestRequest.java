@@ -13,6 +13,9 @@ public class RestRequest<SEND, READ> implements Immutable<RestRequest> {
     public static <SEND, READ> RestRequest.Builder<SEND, READ> builder(){
         return new Builder<>();
     }
+    public static <SEND, READ> RestRequest.Builder<SEND,READ> builder(RestRequest<SEND, READ> r){
+        return new Builder<>(r);
+    }
     public static RestRequest.Builder withGet(){
         return builder().method(Method.GET);
     }
@@ -73,6 +76,17 @@ public class RestRequest<SEND, READ> implements Immutable<RestRequest> {
         private Options options = Options.None;
         private Entity<SEND> entity = Entity.None();
         private Class<READ> responseType;
+
+        public Builder(){}
+        public Builder(RestRequest<SEND,READ> r){
+            this.method = r.method;
+            this.location = r.location;
+            this.headers = r.headers;
+            this.options = r.options;
+            this.entity = r.entity;
+            this.responseType = r.responseType;
+        }
+
         public Builder<SEND, READ> method(Method method) {
             this.method = method;
             return this;

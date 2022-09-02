@@ -12,6 +12,7 @@ dependencies {
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
     implementation("com.sun.xml.bind:jaxb-impl:4.0.0")
 
+    implementation("org.slf4j:slf4j-api:2.0.0")
 
 
     // Use the latest Groovy version for Spock testing

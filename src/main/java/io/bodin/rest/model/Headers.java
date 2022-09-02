@@ -17,11 +17,12 @@ public class Headers implements Serializable, Iterable<Header>, Immutable<Header
     public static Builder builder(){
         return new Headers.Builder();
     }
-    public static Builder withHeades(Headers headers){
+    public static Builder withHeaders(Headers headers){
         Builder result = new Builder();
         headers.forEach(h -> result.header(h.getName(), h.getValue()));
         return result;
     }
+
     public static Builder withHeader(String name, String value){
         return new Builder().header(name, value);
     }
