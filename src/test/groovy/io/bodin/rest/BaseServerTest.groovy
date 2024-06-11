@@ -57,6 +57,12 @@ class BaseServerTest extends Specification {
                 http.sendResponseHeaders(404, 0)
             }
         }
+        server.createContext("/echo-headers") { http ->
+            http.requestHeaders.entrySet().forEach(h -> {
+                h.getValue().forEach(v -> http.responseHeaders.add(h.getKey(), v))
+            })
+            http.sendResponseHeaders(200, 0)
+        }
         server.start()
     }
     def cleanupSpec(){

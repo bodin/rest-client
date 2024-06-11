@@ -1,6 +1,6 @@
 package io.bodin.rest.model;
 
-import io.bodin.rest.Utils;
+import io.bodin.rest.util.Utils;
 import io.bodin.rest.contract.Immutable;
 
 import java.io.Serializable;

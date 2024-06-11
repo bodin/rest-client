@@ -63,7 +63,7 @@ public class SimpleRestEngine implements RestEngine {
                         break;
                     }
                 }
-                if(!written) throw new UnsupportedOperationException("Can't serializable as " + r.getEntity().getContentType());
+                if(!written) throw new UnsupportedOperationException("Can't serializable body as " + r.getEntity().getContentType());
             }
 
             int status = con.getResponseCode();
@@ -82,7 +82,7 @@ public class SimpleRestEngine implements RestEngine {
                 }
             }
 
-            throw new UnsupportedOperationException("Can't serializable to " + r.getResponseType());
+            throw new UnsupportedOperationException("Can't serialize response to " + r.getResponseType());
 
         }finally{
             con.disconnect();

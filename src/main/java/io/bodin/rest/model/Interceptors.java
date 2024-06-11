@@ -1,26 +1,31 @@
 package io.bodin.rest.model;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import java.io.IOException;
 
 public class Interceptors {
-    public Interceptor header(Headers headers){
+    public static Interceptor headers(Headers headers){
         return new HeaderInterceptor(headers);
     }
 
-    public Interceptor header(String name, String value){
+    public static Interceptor header(String name, String value){
         return new HeaderInterceptor(Headers.withHeader(name, value).build());
     }
 
-    public Interceptor log(String id){
+    public static Interceptor log(String id){
         return new LogInterceptor(id, "audit.rest." + id);
+    }
+
+    public static Interceptor log(String id, String loggerName){
+        return new LogInterceptor(id, loggerName);
     }
 
     public static class LogInterceptor implements Interceptor {
         private String id;
-        private org.slf4j.Logger log;
+        private Logger log;
 
         LogInterceptor(String id, String logName){
             this.id = id;
